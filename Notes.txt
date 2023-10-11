@@ -1,0 +1,14 @@
+
+- Firbase setup
+* Create two apps : development and production version
+Auth-Development and Auth-Production
+* We use development and production version because
+To allow only development version accessible to localhost, not production version
+(In authorized domains - in Authentication tab of firebase)
+* Remove localhost in production version from authorized domains.
+* Generate api key
+* In react app store all these keys in .env.local file.
+* Create firebase.js in react app.
+
+- React app setup
+* Create app using create-react-app

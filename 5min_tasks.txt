@@ -1,0 +1,50 @@
+------------------------------------------
+
+Task 1 : Creating firebase app
+
+- Basic setup
+* Go to firebase https://console.firebase.google.com/
+* Add project > give name : Auth-Development
+> Unselect - google analytics > Continue
+* After creating
+> Go to Authentication tab
+> Add Sign-in methods
+> Select : 
+Email/Password : Enable top toggle button > save
+* Add new project for Production : Auth-Production
+> Do similar to production
+> In Authentication tab > Settings > Authorized domains
+Remove localhost
+
+- Api Key generate
+* Select Auth-Development
+* Go to Project-Overview
+* Add web app : click code icon -> '</>'
+* Give any name like : auth-development
+> Click register app
+
+- Using in React app
+* Make a folder for project - 
+npx create-react-app firebase-react-app
+* Create .env.local file
+* Put all key value pairs from generated api key into .env.local file as:
+REACT_APP_<keyName>=<value>
+
+- Create firebase.js as
+* Install : npm i firebase
+* import firebase from 'firebase/app'
+* import "firebase/auth"
+* const app = firebase.initializeApp({
+    apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
+  authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN,
+  projectId: process.env.REACT_APP_FIREBASE_PROJECT_ID,
+  storageBucket: process.env.REACT_APP_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: process.env.REACT_APP_FIREBASE_MESSAGING_SENDER_ID,
+  appId: process.env.REACT_APP_FIREBASE_APP_ID
+})
+* export const auth = app.auth() // Authentication instance
+* export default app // firebase to use in react app
+
+-----------------------------------------------------------
+
+Task 2 : Creating react app
