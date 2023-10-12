@@ -48,3 +48,60 @@ REACT_APP_<keyName>=<value>
 -----------------------------------------------------------
 
 Task 2 : Creating react app
+
+- Setup
+* Install bootstrap : npm i bootstrap react-bootstrap
+* Delete all files in src except : App.js, index.js and firebase.js
+* Create src/components/ folder
+* Move App.js inside components folder, and update in index.js
+* In index.js
+import "bootstrap/dist/css/bootstrap.min.css"
+
+- App.js
+* import {Container} from 'react-bootstrap'
+* import SignUp component
+* return (
+  <Container className="d-flex align-items-center justify-content-center"
+    style={{minHeight: "100vh"}}>
+    <div className="w-100" style={{maxWidth: "400px"}}>
+      <SignUp/>
+    </div>
+  </Container>
+)
+
+- Create Signup.js component as
+* import {
+  Card, Button, Form
+} from 'react-bootstrap'
+* Define refs as :
+const emailRef = useRef()
+const passwordRef = useRef()
+const passwordConfirmRef = useRef()
+* Write component as :
+return (
+  <>
+    <Card>
+      <Card.Body>
+        <h2 className="text-center mb-4">Sign Up</h2>
+        <Form>
+          <Form.Group id="email">
+            <Form.Label>Email</Form.Label>
+            <Form.Control type="email" ref={emailRef} required />
+          </Form.Group>
+          <Form.Group id="password">
+            <Form.Label>Password</Form.Label>
+            <Form.Control type="password" ref={passwordRef} required />
+          </Form.Group>
+          <Form.Group id="password">
+            <Form.Label>Password Confirmation</Form.Label>
+            <Form.Control type="password" ref={passwordConfirmRef} required />
+          </Form.Group>
+          <Button className="w-100" type="submit">Sign Up</Button>
+        </Form>
+      </Card.Body>
+    </Card>
+    <div className="w-100 text-center mt-2">
+      Already have an account? Log In
+    </div>
+  </>
+)
