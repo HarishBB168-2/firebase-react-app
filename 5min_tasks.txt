@@ -31,7 +31,7 @@ npx create-react-app firebase-react-app
 REACT_APP_<keyName>=<value>
 
 - Create firebase.js as
-* Install : npm i firebase
+* Install : npm i firebase@7.20.0
 * import firebase from 'firebase/app'
 * import "firebase/auth"
 * const app = firebase.initializeApp({
@@ -111,7 +111,7 @@ return (
 Task 3 : Auth Context Setup
 
 - Create context
-* Create folder src/context/
+* Create folder src/contexts/
 * Create file AuthContext.js
 import React, {useContext, useState, useEffect} from "react"
 import {auth} from "../firebase"
@@ -124,6 +124,7 @@ export function useAuth() {
 
 const AuthProvider = ({children}) => {
   const [currentUser, setCurrentUser] = useState()
+  const [loading, setLoading] = useState(true)
 
   function signup(email, password) {
     return auth.createUserWithEmailAndPassword(email, password)
@@ -132,6 +133,7 @@ const AuthProvider = ({children}) => {
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged(user => {
       setCurrentUser(user) // user can be null or userData
+      setLoading(false)
     })
 
     return unsubscribe
@@ -145,7 +147,56 @@ const AuthProvider = ({children}) => {
 
   return (
     <AuthContext.Provider value={value}>
-      {children}
+      {!loading && children}
     </AuthContext.Provider>
   )
 }
+
+-----------------------------------------------------------
+
+Task 4 : Sign up component functionality
+
+- In App.js
+* import {AuthProvider} from "../contexts/AuthContext"
+* Wrap all inside AuthProvider
+<AuthProvider>...</AuthProvider>
+
+- In Signup.jsx
+* Import : 
+import {useAuth} from "../contexts/AuthContext"
+* Inside component
+const {signup} = useAuth()
+const [error, setError] = useState('')
+const [loading, setLoading] = useState(false)
+
+async function handleSubmit(e) {
+  e.preventDefault()
+  
+  if(passwordRef.current.value !==
+    passwordConfirmRef.current.value) {
+      return setError("Passwords do not match")
+  }
+  try {
+    setError('')
+    setLoading(true)
+    await signup(emailRef.current.value, passwordRef.current.value)
+  } catch {
+    setError("Failed to create an account")
+  }
+  setLoading(false)
+}
+* Add onSubmit on Form 
+<Form onSubmit={handleSubmit}>
+* Add disabled state to Sign Up button
+<Button disabled={loading}
+* After h2 element add
+{error && <Alert variant="danger">{error}</Alert>}
+* Go to page
+> enter any email and different passwords
+> See password do not match error
+> Make password same
+> See no error and probably user created
+* Inside component add
+const {signup, currentUser} = useAuth()
+* After h2 element add
+{currentUser.email}
