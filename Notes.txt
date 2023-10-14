@@ -13,5 +13,3 @@ To allow only development version accessible to localhost, not production versio
 - React app setup
 * Create app using create-react-app
 
-
-COMPLETED TILL - 20:20

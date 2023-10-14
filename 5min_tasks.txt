@@ -200,3 +200,90 @@ async function handleSubmit(e) {
 const {signup, currentUser} = useAuth()
 * After h2 element add
 {currentUser.email}
+
+-----------------------------------------------------------
+
+Task 5 : Routing
+
+- In Signup.jsx
+* Inside component delete currentUser
+const {signup} = useAuth()
+* After h2 element remove
+{currentUser.email}
+* In last div add Link as
+<Link to="/login" >Log In</Link>
+
+- Create Dashboard.jsx in components as
+* sfc with <div>Dashboard</div>
+
+- Setup
+* SKIP : npm i react-router-dom@5.2.0
+* npm i react-router-dom
+* See created user in firebase console Authentication tab.
+* Create src/routing/routes.js as
+import { createBrowserRouter } from "react-router-dom";
+import App from "../components/App";
+const router = createBrowserRouter([{ path: "/", element: <Dashboard /> },
+{path:"/signup", element: <Signup/>},
+{path:"/login", element: <Login/>}]);
+export default router;
+
+- IN TUTORIAL TO SKIP : In App.js
+import {BrowserRouter as Router, Switch, Route} from 
+'react-router-dom'
+import Dashboard from "./Dashboard"
+import Login from "./Login"
+* Remove wrapping of AuthProvider
+* In component containing <Signup/>
+> Replace <Signup/> with
+<Router>
+  <AuthProvider>
+    <Switch>
+      <Route exact path="/" component={Dashboard} />
+      <Route path="/signup" component={Signup} />
+      <Route path="/login" component={Login} />
+    </Switch>
+  </AuthProvider>
+</Router>
+
+- To do in real : In App.js change as
+<div className="w-100" style={{ maxWidth: "400px" }}>
+  <RouterProvider router={router} />
+</div>
+
+- In AuthContext.js
+* Create login function
+function login(email, password) {
+  return auth.signInWithEmailAndPassword(email, password)
+}
+* Export in value :
+const value = {..., login}
+
+- Create Login.jsx as
+* Copy all from Signup.jsx
+* Remove
+> passwordConfirmRef
+> In handleSubmit : remove if else check
+> In form remove group of password-confirm
+* Rename
+> button to Log In
+> page title to Log In
+> Change last div to : 
+Need an account? <Link to="/signup">Sign Up</Link>
+* Change as
+> const {login} = useAuth()
+> In handleSubmit change signup to login
+await login(...)
+and setError("Failed to sign in")
+
+- Check
+* Create a account in sign up page
+* Go to login page and try to login with wrong password
+* Login with correct password
+
+COMPLETED TILL : 34:54
+
+-----------------------------------------------------------
+
+Task 6 : Redirect to Dashboard
+
