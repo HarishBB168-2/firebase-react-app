@@ -281,9 +281,106 @@ and setError("Failed to sign in")
 * Go to login page and try to login with wrong password
 * Login with correct password
 
-COMPLETED TILL : 34:54
-
 -----------------------------------------------------------
 
 Task 6 : Redirect to Dashboard
 
+- In Login.jsx and Signup.jsx
+* SKIP : import {Link, useHistory} from 'react-router-dom'
+* SKIP : const history = useHistory()
+* SKIP : In handleSubmit after await login(..) or await signup(..)
+history.push("/")
+* import {Link, useNavigate} from 'react-router-dom'
+* const navigate = useNavigate()
+* In handleSubmit after await login(..) or await signup(..)
+navigate("/")
+
+- In AuthContext.js add
+function logout() {
+  return auth.signOut()
+}
+* export in const value
+
+- Building Dashboard
+* In Dashboard.jsx
+* Inside component function
+const [error, setError] = useState("");
+const {currentUser, logout} = useAuth()
+SKIP : const history = useHistory()
+const navigate = useNavigate()
+* Create handleLogout as 
+async function handleLogout() {
+  setError("")
+  try{
+    await logout()
+    SKIP : history.push("/login")
+    navigate("/login")
+  } catch {
+    setError("Failed to log out")
+  }
+}
+* In return replace with
+<>
+  <Card>
+    <Card.Body>
+      <h2 className="text-center mb-4">Profile</h2>
+      {error && <Alert variant="danger">{error}</Alert>}
+      <strong>Email:</strong> {currentUser.email}
+      <Link to="/update-profile" className="btn btn-primary w-100 mt-3">
+        Update Profile
+      </Link>
+    </Card.Body>
+  </Card>  
+  <div className="w-100 text-center mt-2">
+    <Button variant="link" onClick={handleLogout}>Log Out</Button>
+  </div>
+</>
+
+- SKIP : Private route for Dashboard
+* Create PrivateRoute.jsx in components folder
+* 
+const PrivateRoute = ({component: Component, ...rest}) => {
+  const {currentUser} = useAuth()
+  return (
+    <Route
+      {..rest}
+      render={props => {
+        return currentUser ? <Component/> : <Redirect to="/login" />
+      }}
+    >
+    </Route>
+  )
+}
+* Using it in App.js
+<PrivateRoute exact path="/" component={Dashboard} />
+
+- Private route for Dashboard
+* Create PrivateRoute.jsx in src/routing/ folder
+* 
+const PrivateRoutes = () => {
+  const {currentUser} = useAuth()
+
+  return currentUser ? 
+      <Outlet /> :
+      <Navigate to="/login" />;
+}
+* Using it in routes.js
+> Remove current Dashboard route
+> In root add 
+{
+  element: <PrivateRoutes />,
+  children: [
+    {
+      path: "/",
+      element: <Dashboard/>
+    }
+  ]
+}
+
+- Check
+* Login
+* See that directed to Dashboard
+* Logout 
+* See that redirected to login
+
+COMPLETED TILL : 43:38

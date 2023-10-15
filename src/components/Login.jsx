@@ -1,11 +1,12 @@
 import { useRef, useState } from "react";
 import { Card, Button, Form, Alert } from "react-bootstrap";
 import { useAuth } from "../contexts/AuthContext";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const Login = () => {
   const emailRef = useRef();
   const passwordRef = useRef();
+  const navigate = useNavigate();
 
   const { login } = useAuth();
   const [error, setError] = useState("");
@@ -18,6 +19,7 @@ const Login = () => {
       setError("");
       setLoading(true);
       await login(emailRef.current.value, passwordRef.current.value);
+      navigate("/");
     } catch {
       setError("Failed to sign in");
     }
